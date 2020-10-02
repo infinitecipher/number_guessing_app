@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
-  Text,
   Button,
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
+  Dimensions
 } from "react-native";
 
 import Card from "../components/Card";
@@ -21,6 +21,17 @@ const StartGameScreen = (props) => {
   const [enteredValue, setEnteredValue] = useState("");
   const [confirmed, setConfirmed] = useState(false);
   const [selectedNumber, setSelectedNumber] = useState();
+  const [buttonWidth, setButtonWidth] = useState(Dimensions.get('window').width / 4);
+
+  useEffect(() => {
+    const updateLayout = () => {
+      setButtonWidth(Dimensions.get('window').width / 4);
+    }
+    Dimensions.addEventListener('change',  updateLayout);
+    return () => {
+      Dimensions.removeEventListener('change', updateLayout);
+    };
+  })
 
   const numberInputHandler = (inputText) => {
     setEnteredValue(inputText.replace(/[^0-9]/g, ""));
@@ -116,8 +127,9 @@ const styles = StyleSheet.create({
     fontFamily: "open-sans-bold",
   },
   inputContainer: {
-    width: 300,
-    maxWidth: "80%",
+    width: '80%',
+    maxWidth: '95%',
+    minWidth: 300,
     alignItems: "center",
   },
   buttonContainer: {
@@ -127,7 +139,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   button: {
-    width: 100,
+    // width: 100,
+    width: Dimensions.get('window').width / 4
   },
   input: {
     width: 50,
